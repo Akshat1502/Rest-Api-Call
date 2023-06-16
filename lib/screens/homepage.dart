@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+ import '../model/user.dart';
+
     class HomePage extends StatefulWidget {
   const  HomePage({super.key});
 
@@ -12,7 +14,7 @@ import 'package:http/http.dart' as http;
 }
 
 class _HomePageState extends State<HomePage> {
-   List<dynamic> users = [];
+   List<User> users = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,15 +22,20 @@ class _HomePageState extends State<HomePage> {
       ),
       body: ListView.builder(itemCount: users.length,itemBuilder: (context,index){
         final user = users[index];
-        final email = user['email'];
-        final fname = user['name']['first'];
-        final imageUrl = user['picture']['medium'];
+        final email = user.email;
+        final phone = user.phone;
+        final cell = user.cell;
+        
+      // final color = user.gender== 'male' ? Colors.blue :Colors.green;
+        // final email = user['email'];
+        // final fname = user['name']['first'];
+        // final imageUrl = user['picture']['medium'];
         
             return ListTile(
-              
-              leading: ClipOval(child: Image.network(imageUrl)),//Text('${index+1}'),
-           title: Text(fname.toString()),   
-          subtitle: Text(email),
+              title: Text(user.name.first),
+              subtitle: Text(phone),
+              // tileColor: color,
+
         );
       }),
       floatingActionButton:  FloatingActionButton(onPressed: fetchUsers),
@@ -43,9 +50,34 @@ class _HomePageState extends State<HomePage> {
     final Response = await http.get(uri);
     final body = Response.body;
     final json = jsonDecode(body);
+    final results = json ['results'] as List<dynamic>;
+    final transformed = results.map((e) {
+      
+       final  name = UserName(
+
+       title: e['name']['title'], 
+       first: e['name']['first'], 
+       last: e['name']['last']
+       );
+
+      return User(
+      cell: e['cell'],
+      email: e['email'],
+      gender: e['gender'],
+      nat: e['nat'],
+      phone: e['phone'],
+      name: name,
+    );
+    }).toList();
+
     setState(() {
-      users = json['results'];
+      users = transformed;
     });
+
+
+    // setState(() {
+      // users = json['results'];   // commit -1
+    // });
     print("fetching from Api completed!");
     
   }
