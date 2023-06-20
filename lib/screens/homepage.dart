@@ -39,7 +39,13 @@ class _HomePageState extends State<HomePage> {
         
             return ListTile(
               title: Text(user.fullName),
-              subtitle: Text(phone),
+              subtitle: Row(
+                children: [
+                  Text(user.location.country),
+                  const SizedBox(width: 10,),
+                  Text(user.dob.date.toString()),
+                ],
+              ),
               // tileColor: color,
 
         );
