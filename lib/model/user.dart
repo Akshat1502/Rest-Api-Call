@@ -1,3 +1,5 @@
+import 'package:rest_api_calls/model/user_name.dart';
+
 class User {
   final String email;
  final  String gender;
@@ -13,17 +15,9 @@ class User {
     required this.nat, 
     required this.name,
   });
+  String get fullName{
+    return '${name.title} ${name.first} ${name.last}';
+
+  }
 }
 
-class UserName {
-  final String title;
-  final String first;
-  final String last;
-
-
-  UserName({
-    required this.title,
-    required this.first,
-    required this.last,
-  });
-}
