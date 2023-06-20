@@ -38,6 +38,8 @@ class _HomePageState extends State<HomePage> {
         // final imageUrl = user['picture']['medium'];
         
             return ListTile(
+              leading: Image.network(user.picture.thumbnail),
+             
               title: Text(user.fullName),
               subtitle: Row(
                 children: [
